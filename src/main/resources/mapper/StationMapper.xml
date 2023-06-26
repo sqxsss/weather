@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.weather.mapper.StationMapper">
+    <select id="listAllData" resultType="com.project.weather.bean.Station">
+        select *
+        from station
+        order by zipcode
+    </select>
+
+    <select id="listDataByCityCon" parameterType="String" resultType="com.project.weather.bean.Station">
+        select station.station_id, station.sname, station.latitude, station.longtitude, station.elevation, station.zipcode
+        from station, location
+        where location.city like #{city} and location.zip=station.zipcode and (station.station_id like #{condition} or station.sname like #{condition})
+    </select>
+
+    <select id="listIDByCity" parameterType="String" resultType="String">
+        select station.station_id
+        from station, location
+        where location.city = #{city} and location.zip=station.zipcode
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.weather.mapper.PrecipitationMapper">
+    <select id="listPrecipitation" resultType="com.project.weather.bean.Precipitation">
+        select *
+        from precipitation
+    </select>
+
+    <select id="getListOfPrecByStation" parameterType="String" resultType="com.project.weather.bean.Precipitation">
+        select *
+        from precipitation
+        WHERE station_id = #{station_id}
+    </select>
+
+    <select id="getListOfPrecByStationAT" parameterType="String" resultType="com.project.weather.bean.Precipitation">
+        select *
+        from precipitation
+        WHERE station_id = #{station_id} and to_char(data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="getListOfPrecByCityStationAT" parameterType="String" resultType="com.project.weather.bean.Precipitation">
+        select precipitation.station_id, precipitation.data_time, precipitation.dapr, precipitation.mdpr, precipitation.snow, precipitation.snwd, precipitation.prcp
+        from precipitation, location, station
+        WHERE precipitation.station_id like #{station_id} and to_char(precipitation.data_time,'yyyy-MM-dd') between #{begin} and #{end}
+            and location.city=#{city} and location.ZIP = station.ZIPCODE and precipitation.station_id=station.station_id
+        order by precipitation.station_id DESC, precipitation.data_time ASC
+    </select>
+<!--             select precipitation.station_id, precipitation.data_time, precipitation.dapr, precipitation.mdpr, precipitation.snow, precipitation.snwd, precipitation.prcp-->
+<!--             from precipitation, station, location-->
+<!--             WHERE precipitation.station_id like '%' and to_char(precipitation.data_time,'yyyy-MM-dd') between '2019-04-01' and '2019-04-30'-->
+<!--               and precipitation.station_id=station.station_id and station.zipcode=location.zip and location.city='GAINESVILLE'-->
+<!--             order by precipitation.station_id DESC, precipitation.data_time ASC;-->
+
+    <select id="getListOfPrecByTimeRange" parameterType="String" resultType="com.project.weather.bean.Precipitation">
+        select *
+        from precipitation
+        WHERE to_char(data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="getAVGMonthlyPByCity" parameterType="String" resultType="java.lang.Float">
+        select AVG(MP) from (select SUM(PRCP) as MP,precipitation.station_id
+        from precipitation, location, station
+        where to_char(DATA_TIME,'yyyy-MM-dd') like #{month} and PRCP >= 0 and location.city=#{city}
+        and location.ZIP = station.ZIPCODE and precipitation.station_id=station.station_id GROUP BY precipitation.station_id having Count(*)=to_number(#{dnumOfMonth}))
+    </select>
+
+    <select id="countMonthlyPByCity" parameterType="String" resultType="java.lang.Integer">
+        select count(count(precipitation.station_id))
+            from precipitation, location, station
+            where to_char(DATA_TIME,'yyyy-MM-dd') like #{month} and PRCP >= 0 and location.city=#{city}
+                and location.ZIP = station.ZIPCODE and precipitation.station_id=station.station_id GROUP BY precipitation.station_id having Count(*)=to_number(#{dnumOfMonth})
+    </select>
+</mapper>

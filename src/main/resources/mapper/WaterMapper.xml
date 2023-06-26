@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.weather.mapper.WaterMapper">
+<!--    <select id="listUser" resultType="com.project.weather.bean.User">-->
+<!--        select *-->
+<!--        from weathersysuser-->
+<!--        order by user_id-->
+<!--    </select>-->
+
+<!--    <select id="getUserInfoByID" parameterType="java.lang.Integer" resultType="com.project.weather.bean.User">-->
+<!--        select *-->
+<!--        from weathersysuser-->
+<!--        WHERE user_id = #{user_id}-->
+<!--    </select>-->
+
+<!--    <select id="getUserInfo" parameterType="String" resultType="com.project.weather.bean.User">-->
+<!--        select *-->
+<!--        from weathersysuser-->
+<!--        WHERE email = #{email}-->
+<!--          AND password = #{password}-->
+<!--    </select>-->
+
+<!--    <select id="getUserNumByDate" parameterType="String" resultType="java.lang.Integer">-->
+<!--        select COUNT(*) from weathersysuser where to_char(createtime,'yyyy-MM-dd')= #{createtime}-->
+<!--    </select>-->
+
+<!--    <select id="getUserInfoByEmail" parameterType="String" resultType="com.project.weather.bean.User">-->
+<!--        select *-->
+<!--        from weathersysuser-->
+<!--        WHERE email = #{email}-->
+<!--    </select>-->
+
+<!--    <select id="getLastUserID" resultType="java.lang.Integer">-->
+<!--        select MAX(user_id)-->
+<!--        from weathersysuser-->
+<!--    </select>-->
+
+<!--    <insert id="addUser" parameterType="com.project.weather.bean.User">-->
+<!--        insert into weathersysuser-->
+<!--        values (#{user_id}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{usertype,jdbcType=CHAR}, #{createtime, jdbcType=DATE})-->
+<!--    </insert>-->
+
+<!--    <update id="updateEmail" parameterType="com.project.weather.bean.User">-->
+<!--        update weathersysuser-->
+<!--        set email = #{email,jdbcType=VARCHAR}-->
+<!--        where user_id = #{user_id,jdbcType=INTEGER}-->
+<!--    </update>-->
+
+<!--    <delete id="deleteByUserId" parameterType="java.lang.Integer">-->
+<!--        delete-->
+<!--        from weathersysuser-->
+<!--        where user_id = #{user_id,jdbcType=INTEGER}-->
+<!--    </delete>-->
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.weather.mapper.AirTemperatureMapper">
+    <select id="listTemByDaterange" parameterType="String" resultType="com.project.weather.bean.AirTemperature">
+        select *
+        from airtemperature
+        where tmax > -999 and tmin > -999 and to_char(data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="listTemByDaterangeCity" parameterType="String" resultType="com.project.weather.bean.AirTemperature">
+        select airtemperature.station_id, airtemperature.data_time, airtemperature.tavg, airtemperature.tmax, airtemperature.tmin, airtemperature.tobs
+        from airtemperature, location, station
+        where location.city=#{city} and location.ZIP = station.ZIPCODE and airtemperature.station_id=station.station_id
+        and airtemperature.tmax > -999 and airtemperature.tmin > -999 and to_char(airtemperature.data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="listTemByDaterangeStation" parameterType="String" resultType="com.project.weather.bean.AirTemperature">
+        select airtemperature.station_id, airtemperature.data_time, airtemperature.tavg, airtemperature.tmax, airtemperature.tmin, airtemperature.tobs
+        from airtemperature, station
+        where station.station_id = #{station_id} and airtemperature.station_id=station.station_id
+          and airtemperature.tmax > -999 and airtemperature.tmin > -999 and to_char(airtemperature.data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="getAVGTemMonthlyByCity" parameterType="String" resultType="java.lang.Integer">
+        select AVG(avgT) from (
+            select AVG((airtemperature.tmax + airtemperature.tmin)/2) as avgT, airtemperature.station_id
+            from airtemperature, location, station
+            where to_char(DATA_TIME,'yyyy-MM-dd') like #{month} and airtemperature.tmax > -999 and airtemperature.tmin > -999 and location.city=#{city}
+              and location.ZIP = station.ZIPCODE and airtemperature.station_id=station.station_id GROUP BY airtemperature.station_id having Count(*)=to_number(#{dnumOfMonth}))
+    </select>
+
+    <select id="countTemMonthlyByCity" parameterType="String" resultType="java.lang.Integer">
+        select count(count(airtemperature.station_id))
+        from airtemperature, location, station
+        where  to_char(DATA_TIME,'yyyy-MM-dd') like #{month} and airtemperature.tmax > -999 and airtemperature.tmin > -999 and location.city=#{city}
+          and location.ZIP = station.ZIPCODE and airtemperature.station_id=station.station_id GROUP BY airtemperature.station_id having Count(*)=to_number(#{dnumOfMonth})
+    </select>
+
+</mapper>

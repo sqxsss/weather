@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.weather.mapper.EvaporationMapper">
+    <select id="listEvapByDaterange" parameterType="String" resultType="com.project.weather.bean.Evaporation">
+        select *
+        from evaporation
+        where evap > -999 and to_char(data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="listEvapByDaterangeCity" parameterType="String" resultType="com.project.weather.bean.Evaporation">
+        select evaporation.station_id, evaporation.data_time, evaporation.mxpn, evaporation.mnpn, evaporation.evap
+        from evaporation, location, station
+        where location.city=#{city} and location.ZIP = station.ZIPCODE and evaporation.station_id=station.station_id
+          and evap > -999 and to_char(evaporation.data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="listEvapByDaterangeStation" parameterType="String" resultType="com.project.weather.bean.Evaporation">
+        select evaporation.station_id, evaporation.data_time, evaporation.mxpn, evaporation.mnpn, evaporation.evap
+        from evaporation, station
+        where station.station_id = #{station_id} and evaporation.station_id=station.station_id
+          and evap > -999 and to_char(evaporation.data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="getEvapMonthlyByCity" parameterType="String" resultType="java.lang.Float">
+        select AVG(EVAPS) from (
+          select SUM(evap) as EVAPS, evaporation.station_id
+          from evaporation, location, station
+          where to_char(DATA_TIME,'yyyy-MM-dd') like #{month} and evap > -999 and location.city=#{city}
+            and location.ZIP = station.ZIPCODE and evaporation.station_id=station.station_id GROUP BY evaporation.station_id)
+    </select>
+
+    <select id="countEvapMonthlyByCity" parameterType="String" resultType="java.lang.Integer">
+        select count(count(evaporation.station_id))
+        from evaporation, location, station
+        where  to_char(DATA_TIME,'yyyy-MM-dd') like #{month} and evap > -999 and location.city=#{city}
+          and location.ZIP = station.ZIPCODE and evaporation.station_id=station.station_id GROUP BY evaporation.station_id
+    </select>
+</mapper>

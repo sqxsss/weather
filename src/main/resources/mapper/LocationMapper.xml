@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.weather.mapper.LocationMapper">
+    <select id="listAllData" resultType="com.project.weather.bean.Location">
+        select *
+        from location
+        order by zip
+    </select>
+
+    <select id="listDataByCondition" parameterType="String" resultType="com.project.weather.bean.Location">
+        select *
+        from location
+        where zip like #{condition} or city like #{condition} or county like #{condition} or state like #{condition}
+        order by zip
+    </select>
+
+    <select id="getCityList" resultType="String">
+        select city
+        from location
+    </select>
+
+</mapper>

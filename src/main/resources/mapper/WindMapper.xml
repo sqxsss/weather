@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.weather.mapper.WindMapper">
+    <select id="listWindByDaterange" parameterType="String" resultType="com.project.weather.bean.Wind">
+        select *
+        from wind
+        where (awnd > -999 or wsf5 > -999 or wsf2 >-999 or wdf5 > -999 or wdf2 >-999) and to_char(data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="listWindByDaterangeCity" parameterType="String" resultType="com.project.weather.bean.Wind">
+        select wind.station_id, wind.data_time, wind.awnd, wind.wsf5, wind.wsf2, wind.wdf5, wind.wdf2
+        from wind, location, station
+        where location.city=#{city} and location.ZIP = station.ZIPCODE and wind.station_id=station.station_id
+          and (awnd > -999 or wsf5 > -999 or wsf2 >-999 or wdf5 > -999 or wdf2 >-999) and to_char(wind.data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+
+    <select id="listWindByDaterangeStation" parameterType="String" resultType="com.project.weather.bean.Wind">
+        select wind.station_id, wind.data_time, wind.awnd, wind.wsf5, wind.wsf2, wind.wdf5, wind.wdf2
+        from wind, station
+        where station.station_id = #{station_id} and wind.station_id=station.station_id
+          and (awnd > -999 or wsf5 > -999 or wsf2 >-999 or wdf5 > -999 or wdf2 >-999) and to_char(wind.data_time,'yyyy-MM-dd') between #{begin} and #{end}
+    </select>
+</mapper>
